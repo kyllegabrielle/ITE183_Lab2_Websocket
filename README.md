@@ -1,7 +1,7 @@
 # ITE183 Laboratory 2: WebSocket Server
 
-**Name:** [Your full name]  
-**Course and Section:** [Your course and section]
+**Name:** Kylle Gabrielle Lemery
+**Course and Section:** ITE183 - IT4D
 
 ## Overview
 
