@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BSL WebSocket Chat</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 32px 16px;
+      font-family: Arial, sans-serif;
+      color: #243047;
+      background: #f1f5f9;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px;
+      background: white;
+      border: 1px solid #dce3ed;
+      border-radius: 16px;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
+
+    .description {
+      margin-top: 0;
+      color: #526176;
+      line-height: 1.5;
+    }
+
+    #status {
+      padding: 12px;
+      margin: 20px 0;
+      border-radius: 8px;
+      background: #e9edf2;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    #log {
+      height: 320px;
+      padding: 16px;
+      overflow-y: auto;
+      border: 1px solid #dce3ed;
+      border-radius: 8px;
+      background: #f8fafc;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    #log > div {
+      margin-bottom: 8px;
+    }
+
+    #controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #bac6d6;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 8px;
+      background: #3159b8;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .sent {
+      color: #2458b8;
+    }
+
+    .received {
+      color: #17643c;
+    }
+
+    .system {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .error {
+      color: #b42318;
+    }
+
+    .note {
+      margin-bottom: 0;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>BSL WebSocket Chat</h1>
+
+    <p class="description">
+      A real-time multi-client chat using Bonezegei Scripting Language.
+      Open this page in another browser tab to test message broadcasting.
+    </p>
+
+    <div id="status" role="status">Status: Connecting...</div>
+
+    <div
+      id="log"
+      role="log"
+      aria-live="polite"
+      aria-label="Chat messages"
+    ></div>
+
+    <form id="controls">
+      <input
+        type="text"
+        id="msgInput"
+        aria-label="Message"
+        placeholder="Enter a message..."
+        autocomplete="off"
+        disabled
+      >
+
+      <button type="submit" id="sendBtn" disabled>
+        Send
+      </button>
+    </form>
+
+    <p class="note">
+      Messages are broadcast to all connected clients, including the sender.
+      Reload this page to reconnect if the connection closes.
+    </p>
+  </main>
+
+  <script>
+    const statusDiv = document.getElementById("status");
+    const logDiv = document.getElementById("log");
+    const msgInput = document.getElementById("msgInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const controls = document.getElementById("controls");
+
+    // Use the same host and forwarded port as the current page.
+    const protocol = location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl = `${protocol}//${location.host}`;
+
+    const socket = new WebSocket(wsUrl);
+
+    function appendLog(text, className) {
+      const entry = document.createElement("div");
+      entry.className = className;
+
+      // Display messages as text.
+      entry.textContent = text;
+
+      logDiv.appendChild(entry);
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    socket.onopen = function () {
+      statusDiv.textContent = "Status: Connected";
+      statusDiv.style.backgroundColor = "#dcfce7";
+      statusDiv.style.color = "#166534";
+
+      msgInput.disabled = false;
+      sendBtn.disabled = false;
+
+      appendLog(
+        "[System] Handshake complete. WebSocket ready.",
+        "system"
+      );
+    };
+
+    socket.onmessage = function (event) {
+      appendLog("[Server] " + event.data, "received");
+    };
+
+    socket.onclose = function () {
+      statusDiv.textContent = "Status: Disconnected";
+      statusDiv.style.backgroundColor = "#fee2e2";
+      statusDiv.style.color = "#991b1b";
+
+      msgInput.disabled = true;
+      sendBtn.disabled = true;
+
+      appendLog(
+        "[System] Connection closed. Reload the page to reconnect.",
+        "system"
+      );
+    };
+
+    socket.onerror = function () {
+      appendLog(
+        "[Error] WebSocket connection failed. Check the server and forwarded port.",
+        "error"
+      );
+    };
+
+    controls.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const text = msgInput.value.trim();
+
+      if (text && socket.readyState === WebSocket.OPEN) {
+        socket.send(text);
+        appendLog("[You] " + text, "sent");
+        msgInput.value = "";
+      }
+    });
+  </script>
+</body>
+</html>

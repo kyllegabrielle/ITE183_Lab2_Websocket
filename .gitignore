@@ -1,0 +1,6 @@
+# Downloaded installer
+*.deb
+
+# System files
+.DS_Store
+Thumbs.db
