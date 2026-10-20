@@ -90,13 +90,13 @@ according to the page protocol.
 
 ### Connected Client
 
-![Connected client](documentation/04-connected-client.jpg)
+![Connected client](documentation/04-connected-client.png)
 
 ### Multi-client Broadcasting
 
-![Client A](documentation/05-client-a.jpg)
+![Client A](documentation/05-client-a.png)
 
-![Client B](documentation/06-client-b.jpg)
+![Client B](documentation/06-client-b.png)
 
 ### Server Events
 
@@ -104,7 +104,7 @@ according to the page protocol.
 
 ### Custom 404 Page
 
-![Custom 404 page](documentation/08-404-page.jpg)
+![Custom 404 page](documentation/08-404-page.png)
 
 ## References
 
