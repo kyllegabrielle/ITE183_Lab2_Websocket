@@ -78,33 +78,33 @@ according to the page protocol.
 
 ### Bonezegei Version
 
-![Version verification](documentation/01-version.png)
+![Version verification](documentation/01-version.jpg)
 
 ### Dependency Installation
 
-![Dependency installation](documentation/02-install.png)
+![Dependency installation](documentation/02-install.jpg)
 
 ### Server Startup
 
-![Server startup](documentation/03-server-startup.png)
+![Server startup](documentation/03-server-startup.jpg)
 
 ### Connected Client
 
-![Connected client](documentation/04-connected-client.png)
+![Connected client](documentation/04-connected-client.jpg)
 
 ### Multi-client Broadcasting
 
-![Client A](documentation/05-client-a.png)
+![Client A](documentation/05-client-a.jpg)
 
-![Client B](documentation/06-client-b.png)
+![Client B](documentation/06-client-b.jpg)
 
 ### Server Events
 
-![Server events](documentation/07-server-events.png)
+![Server events](documentation/07-server-events.jpg)
 
 ### Custom 404 Page
 
-![Custom 404 page](documentation/08-404-page.png)
+![Custom 404 page](documentation/08-404-page.jpg)
 
 ## References
 
